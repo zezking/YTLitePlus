@@ -180,6 +180,11 @@ jobs:
           EOF
           # Manually install the Open in YouTube extension
           cp -R Extensions/*.appex tmp/Payload/YouTube.app/PlugIns
+          # Embed YTLitePlus' own strings bundle. Without it LOC() returns nil and any
+          # settings pane that formats a localized string crashes with
+          # "-[NSPlaceholderString initWithFormat:locale:arguments:]: nil argument"
+          # (the jailbroken deb packaging copies this, the jailed/CI path never did).
+          cp -R lang/YTLitePlus.bundle tmp/Payload/YouTube.app/
         env:
           THEOS: ${{ github.workspace }}/theos
           YOUTUBE_URL: ${{ env.URL_YT }}
